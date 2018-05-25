@@ -1,0 +1,91 @@
+{% extends "home-base.html"%}
+{% block title %}All Artists{% endblock %}
+{% block page_content%}
+
+  <!-- Page Content -->
+  <div class="container">
+    <h1 class="mt-5"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Artists:</h1>
+    <div class="row bottom-margin">
+      <a href="/artist/add" class="btn btn-primary" role="button" aria-disabled="true">Add Artists</a>
+    </div>
+    {% if artists %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>About</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for artist in artists %}
+          <tr>
+              <th scope="row">{{artist.id}}</th>
+              <td>{{artist.name}}</td>
+              <td>{{artist.about}}</td>
+              <td>
+                <a href="/artist/edit/{{artist.id}}" class="btn btn-success" role="button">Edit</a>
+                <a href="/artist/delete/{{artist.id}}" class="btn btn-danger" role="button">Delete</a>
+                <button class="btn btn-warning delete_ajax_btn" role="button" data-artist-id="{{artist.id}}">Delete Ajax</a>
+              </td>
+          </tr>
+          {% endfor%}
+        </tbody>
+      </table>
+    {% else %}
+      <h3> Database is empty</h3>
+    {% endif %}
+  </div>
+
+{% endblock%}
+
+{% block scripts%}
+{{super()}}
+<script>
+  $(document).ready(function() {
+    $(".delete_ajax_btn").click(function(event) {
+      var artist_id = $(this).data("artist-id");
+      var row = $(this).parent().parent();
+      swal({
+          title: "Confirm",
+          text: "All songs w/ this artist will be deleted as well",
+          type: "warning",
+          html: true,
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Confirm",
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true
+        },
+        function(isConfirm) {
+          if (isConfirm) {
+            $.ajax({
+                type: "DELETE",
+                url: "/api/artist/" + artist_id,
+                success: function(response) {
+                  console.log(response);
+                  row.remove();
+                  swal({
+                    title: "Deleted",
+                    text: response.name + " has been deleted.",
+                    type: "Success",
+                    timer: 2500,
+                    showConfirmButton: false
+                  });
+                }
+              })
+              .fail(function(error) {
+                swal({
+                  title: "Oops...",
+                  text: "Deletion failed",
+                  type: "error",
+                  timer: 2000,
+                  showConfirmButton: false
+                });
+              }); 
+        });
+    });
+  });
+</script>
+{% endblock%}

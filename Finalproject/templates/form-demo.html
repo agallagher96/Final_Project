@@ -1,0 +1,29 @@
+{% extends "home-base.html"%}
+{% block title %}Form Demo{% endblock %}
+{% block page_content%}
+
+  <div class="container">
+    <h1>Hello,
+      {% if first_name %}
+        {{first_name}}
+      {% else %}
+        Stranger
+      {% endif %}
+    </h1>
+    <form action="/form-demo" method="get">
+    Your name:<br>
+    <input type="text" name="first_name"><br><br>
+    <input type="submit" value="Submit">
+    </form>
+
+    <form action="/form-demo" method="post">
+      <div class="form-group">
+        <label>Your name: </label>
+        <input class="form-control" type="text" name="first_name"placeholder="Please enter your name">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+  </div>
+
+{% endblock%}

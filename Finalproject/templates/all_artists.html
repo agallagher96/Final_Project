@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title%} All Artists {%endblock%}
+
+{% block content %}
+<h1> This page shows all artists in the database</h1>
+
+{% if artists %}
+<h2>we have data</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Saul</td>
+      <td>Hudson</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>David</td>
+      <td>Gilmore</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>John</td>
+      <td>Mayer</td>
+    </tr>
+  </tbody>
+</table>
+
+{% for artist in artists %}
+<h2>{{artist.name}}</h2>
+{% endfor %}
+
+<h3>{{artist.about}}</h3>
+{% else %}
+<h2>artists table is empty</h2>
+{% endif %}
+
+{% endblock %}
